@@ -20,9 +20,9 @@ require("lazy").setup({
   'alexghergh/nvim-tmux-navigation',
   'ggandor/leap.nvim',
   {
-      "ThePrimeagen/harpoon",
-      branch = "harpoon2",
-      dependencies = { "nvim-lua/plenary.nvim" }
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" }
   },
   'rebelot/kanagawa.nvim',
   {'nvim-treesitter/nvim-treesitter'},
@@ -57,6 +57,11 @@ require("lazy").setup({
     -- install jsregexp (optional!).
     build = "make install_jsregexp"
   },
+  {
+    "sylvanfranklin/omni-preview.nvim",
+    opts = {}
+  },
+  { 'chomosuke/typst-preview.nvim', lazy = true },
 
   'ThePrimeagen/vim-be-good',
 
@@ -70,7 +75,15 @@ require("lazy").setup({
     config = function()
       require("inc_rename").setup()
     end,
-  }
+  },
+  {
+    "nvimdev/indentmini.nvim",
+    config = function()
+      require("indentmini").setup()
+      vim.cmd.highlight('IndentLine guifg=#444444')
+      vim.cmd.highlight('IndentLineCurrent guifg=#666666')
+    end
+  },
 })
 
 pcall(require, 'plugins.leap')
@@ -83,7 +96,7 @@ pcall(require, 'plugins.snip')
 pcall(require, 'plugins.ncmp')
 pcall(require, 'plugins.stal')
 pcall(require, 'plugins.surr')
-pcall(require, 'plugins.tree')
+-- pcall(require, 'plugins.tree')
 pcall(require, 'plugins.sign')
 pcall(require, 'plugins.outl')
 pcall(require, 'plugins.conform')
