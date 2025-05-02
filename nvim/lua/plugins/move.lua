@@ -1,0 +1,5 @@
+local moveline = require('moveline')
+vim.keymap.set('n', '<C-n>', moveline.up)
+vim.keymap.set('n', '<C-t>', moveline.down)
+vim.keymap.set('v', '<C-n>', moveline.block_up)
+vim.keymap.set('v', '<C-t>', moveline.block_down)

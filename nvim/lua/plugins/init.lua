@@ -84,6 +84,10 @@ require("lazy").setup({
       vim.cmd.highlight('IndentLineCurrent guifg=#666666')
     end
   },
+  {
+    'willothy/moveline.nvim',
+    build = 'make',
+  }
 })
 
 pcall(require, 'plugins.leap')
@@ -96,6 +100,7 @@ pcall(require, 'plugins.snip')
 pcall(require, 'plugins.ncmp')
 pcall(require, 'plugins.stal')
 pcall(require, 'plugins.surr')
+pcall(require, 'plugins.move')
 -- pcall(require, 'plugins.tree')
 pcall(require, 'plugins.sign')
 pcall(require, 'plugins.outl')
