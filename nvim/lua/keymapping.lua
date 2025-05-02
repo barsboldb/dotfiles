@@ -37,10 +37,6 @@ map('n', 'M', 'N')
 map("v", "<", "<gv", { noremap = true, silent = true })
 map("v", ">", ">gv", { noremap = true, silent = true })
 
--- Move text up or down
-map("n", "<C-n>", ":m .-2<CR>==", { noremap = true, silent = true })
-map("n", "<C-t>", ":m .+1<CR>==", { noremap = true, silent = true })
-
 map("n", "<leader>gl", ":Gitsign")
 
 map("n", "<leader>o", "<C-o>", { noremap = true })
