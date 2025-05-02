@@ -37,13 +37,13 @@ lspconfig.pyright.setup {
 
 lspconfig.ts_ls.setup {
   init_options = {
-    plugins = {
-      {
-        name = '@vue/typescript-plugin',
-        location = '/usr/local/lib/node_modules/@vue/typescript-plugin',
-        languages = {'vue', 'typescript', 'javascript'},
-      },
-    },
+    -- plugins = {
+    --   {
+    --     name = '@vue/typescript-plugin',
+    --     location = '/usr/local/lib/node_modules/@vue/typescript-plugin',
+    --     languages = {'vue', 'typescript', 'javascript'},
+    --   },
+    -- },
   },
   root_dir = lspconfig.util.root_pattern('package.json', 'index.html'),
   single_file_support = false,
@@ -52,35 +52,49 @@ lspconfig.ts_ls.setup {
     'javascript',
     'typescriptreact',
     'javascriptreact',
-    'vue',
   }
 }
 
-lspconfig.emmet_language_server.setup {}
+lspconfig.texlab.setup({
+  filetypes = {'tex'},
+  auxDirectory = "build",
+  build = {
+    args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f", "-auxdir=build" },
+    onSave = true,
+    forwardSearchAfter = true,
+  },
+  chktex = {
+    onOpenAndSave = true,
+  }
+})
+
+lspconfig.tinymist.setup({})
+
+lspconfig.emmet_language_server.setup({})
 
 -- lspconfig.volar.setup{
 --   filetypes = {'vue', 'typescript'}
 -- }
-lspconfig.eslint.setup{
+lspconfig.eslint.setup({
   filetypes = {'vue', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact'}
-}
+})
 
-lspconfig.clangd.setup {
+lspconfig.clangd.setup({
   filetypes = {'c', 'cpp'},
   cmd = {
     'clangd',
     '--offset-encoding=utf-16'
   }
-}
+})
 
-lspconfig.rust_analyzer.setup {
+lspconfig.rust_analyzer.setup({
   filetypes = {'rust'},
   capabilities = capabilities,
-}
+})
 
-lspconfig.lua_ls.setup {}
+lspconfig.lua_ls.setup({})
 
-lspconfig.gopls.setup {}
+lspconfig.gopls.setup({})
 
 lspconfig.sourcekit.setup {
   filetypes = { 'swift' },

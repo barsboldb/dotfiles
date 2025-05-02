@@ -3,9 +3,15 @@ local staline_ok, staline = pcall(require, 'staline')
 
 if staline_ok then
   staline.setup({
-    -- defaults = {
-    --   branch_symbol = ' ',
-    -- },
+    defaults = {
+      branch_symbol = ' ',
+    },
+    mode_icons = {
+      n = "NORMAL",
+      v = "VISUAL",
+      i = "INSERT",
+      c = "COMMAND"
+    }
   })
 end
 

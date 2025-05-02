@@ -12,7 +12,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  'folke/tokyonight.nvim',
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  "folke/tokyonight.nvim",
   'nvim-lua/plenary.nvim',
   { 'nvim-telescope/telescope.nvim', event = 'VeryLazy' },
   'tpope/vim-commentary',
@@ -50,23 +51,6 @@ require("lazy").setup({
   'sindrets/diffview.nvim',
 
   {
-    "kdheepak/lazygit.nvim",
-    cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    keys = {
-      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-    }
-  },
-
-  {
     "L3MON4D3/LuaSnip",
     -- follow latest release.
     version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
@@ -77,6 +61,16 @@ require("lazy").setup({
   'ThePrimeagen/vim-be-good',
 
   'hedyhli/outline.nvim',
+  {
+    'stevearc/conform.nvim',
+    event = "VeryLazy",
+  },
+  {
+    "smjonas/inc-rename.nvim",
+    config = function()
+      require("inc_rename").setup()
+    end,
+  }
 })
 
 pcall(require, 'plugins.leap')
@@ -92,7 +86,8 @@ pcall(require, 'plugins.surr')
 pcall(require, 'plugins.tree')
 pcall(require, 'plugins.sign')
 pcall(require, 'plugins.outl')
+pcall(require, 'plugins.conform')
 -- pcall(require, 'plugins.copi')
 require('scrollbar').setup()
 
-vim.cmd[[colorscheme tokyonight-night]]
+vim.cmd[[colorscheme catppuccin-mocha]]

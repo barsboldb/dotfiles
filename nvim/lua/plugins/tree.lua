@@ -19,8 +19,8 @@ nvim_tree.setup({
   },
 })
 
--- vim.api.nvim_create_autocmd({"QuitPre"}, {
---   callback = function() vim.cmd("NvimTreeClose") end,
--- })
+vim.api.nvim_create_autocmd({"QuitPre"}, {
+  callback = function() vim.cmd("NvimTreeClose") end,
+})
 
--- map('n', '<leader>e', ':NvimTreeToggle<cr>', {silent = true})
+map('n', '<leader>E', ':NvimTreeToggle<cr>', {silent = true})

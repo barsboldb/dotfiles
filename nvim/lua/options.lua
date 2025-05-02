@@ -25,11 +25,13 @@ local options = {
   mouse='',
 }
 
+-- filetype plugin intend on
+
 for k, v in pairs(options) do
   o[k] = v
 end
 
-vim.cmd[[set colorcolumn=72]]
+vim.cmd[[set colorcolumn=80]]
 vim.cmd [[
   augroup _auto_resize
     autocmd!
