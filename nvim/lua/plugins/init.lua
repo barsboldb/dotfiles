@@ -12,37 +12,150 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  "folke/tokyonight.nvim",
-  'nvim-lua/plenary.nvim',
-  { 'nvim-telescope/telescope.nvim', event = 'VeryLazy' },
-  'nvim-telescope/telescope-ui-select.nvim',
+  -- Colorschemes (only the active one loads at startup)
+  { "catppuccin/nvim", name = "catppuccin", lazy = true },
+  { "folke/tokyonight.nvim", priority = 1000 },
+  { 'rebelot/kanagawa.nvim', lazy = true },
+
+  -- Libraries: loaded on demand when required by other plugins
+  { 'nvim-lua/plenary.nvim', lazy = true },
+  { 'nvim-tree/nvim-web-devicons', lazy = true },
+  { 'onsails/lspkind.nvim', lazy = true },
+
   'tpope/vim-commentary',
-  'alexghergh/nvim-tmux-navigation',
-  'https://codeberg.org/andyg/leap.nvim',
-  'rebelot/kanagawa.nvim',
-  {'nvim-treesitter/nvim-treesitter'},
 
-  'neovim/nvim-lspconfig',
-  'hrsh7th/cmp-nvim-lsp',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-path',
-  'hrsh7th/nvim-cmp',
+  {
+    'nvim-telescope/telescope.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-ui-select.nvim' },
+    cmd = 'Telescope',
+    keys = { '<leader>f', '<leader>b', '<leader>F', '<leader>df', '<leader>/' },
+    config = function() require('plugins.tele') end,
+  },
 
-  'hrsh7th/cmp-vsnip',
-  'saadparwaiz1/cmp_luasnip',
+  {
+    'alexghergh/nvim-tmux-navigation',
+    keys = { '<C-h>', '<C-t>', '<C-n>', '<C-s>' },
+    config = function() require('plugins.tmux') end,
+  },
 
-  'nvim-tree/nvim-web-devicons',
-  'onsails/lspkind.nvim',
-  'p00f/clangd_extensions.nvim',
+  {
+    'https://codeberg.org/andyg/leap.nvim',
+    keys = { 'j', 'k' },
+    config = function() require('plugins.leap') end,
+  },
 
-  'petertriho/nvim-scrollbar',
-  'kylechui/nvim-surround',
-  'windwp/nvim-autopairs',
-  'lewis6991/gitsigns.nvim',
-  'tamton-aquib/staline.nvim',
-  'akinsho/bufferline.nvim',
-  'nvim-tree/nvim-tree.lua',
+  {
+    'nvim-treesitter/nvim-treesitter',
+    event = { 'BufReadPost', 'BufNewFile' },
+    config = function() require('plugins.trst') end,
+  },
+
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = { 'p00f/clangd_extensions.nvim' },
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function() require('plugins.lspc') end,
+  },
+
+  -- Completion stack: only needed once you start typing
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-vsnip',
+      'saadparwaiz1/cmp_luasnip',
+      'onsails/lspkind.nvim',
+      'L3MON4D3/LuaSnip',
+    },
+    config = function() require('plugins.ncmp') end,
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    event = "InsertEnter",
+    config = function() require('plugins.snip') end,
+  },
+
+  {
+    'tamton-aquib/staline.nvim',
+    dependencies = { 'akinsho/bufferline.nvim', 'nvim-tree/nvim-web-devicons' },
+    event = 'VeryLazy',
+    config = function() require('plugins.stal') end,
+  },
+
+  {
+    'kylechui/nvim-surround',
+    dependencies = { 'windwp/nvim-autopairs' },
+    event = 'VeryLazy',
+    config = function() require('plugins.surr') end,
+  },
+
+  {
+    'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function() require('plugins.sign') end,
+  },
+
+  {
+    'petertriho/nvim-scrollbar',
+    event = 'VeryLazy',
+    config = function() require('scrollbar').setup() end,
+  },
+
+  {
+    'willothy/moveline.nvim',
+    build = 'make',
+    keys = {
+      { '<M-n>', mode = { 'n', 'v' } },
+      { '<M-t>', mode = { 'n', 'v' } },
+    },
+    config = function() require('plugins.move') end,
+  },
+
+  {
+    'hedyhli/outline.nvim',
+    cmd = { 'Outline', 'OutlineOpen' },
+    keys = { '<leader>e' },
+    config = function() require('plugins.outl') end,
+  },
+
+  {
+    'stevearc/conform.nvim',
+    keys = { { '<leader>lf', mode = 'v' } },
+    config = function() require('plugins.conform') end,
+  },
+
+  {
+    'stevearc/oil.nvim',
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    cmd = 'Oil',
+    keys = { '-' },
+    config = function() require('plugins.tree') end,
+  },
+
+  { 'ThePrimeagen/vim-be-good', cmd = 'VimBeGood' },
+
+  {
+    "smjonas/inc-rename.nvim",
+    cmd = 'IncRename',
+    config = function()
+      require("inc_rename").setup()
+    end,
+  },
+
+  {
+    "nvimdev/indentmini.nvim",
+    event = { 'BufReadPost', 'BufNewFile' },
+    config = function()
+      require("indentmini").setup()
+      vim.cmd.highlight('IndentLine guifg=#444444')
+      vim.cmd.highlight('IndentLineCurrent guifg=#666666')
+    end
+  },
 
   {
     "esmuellert/codediff.nvim",
@@ -55,20 +168,15 @@ require("lazy").setup({
       },
     }
   },
-  {
-    "L3MON4D3/LuaSnip",
-    version = "v2.*",
-    build = "make install_jsregexp"
-  },
-  {
-    "sylvanfranklin/omni-preview.nvim",
-    opts = {}
-  },
+
+  { "sylvanfranklin/omni-preview.nvim", opts = {} },
   { 'chomosuke/typst-preview.nvim', lazy = true },
-  { "toppair/peek.nvim",
+  {
+    "toppair/peek.nvim",
     lazy = true,
     build = "deno task --quiet build:fast",
   },
+
   {
     "hat0uma/csvview.nvim",
     ---@module "csvview"
@@ -92,33 +200,9 @@ require("lazy").setup({
     cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
   },
 
-  'ThePrimeagen/vim-be-good',
-
-  'hedyhli/outline.nvim',
-  {
-    'stevearc/conform.nvim',
-    event = "VeryLazy",
-  },
-  {
-    "smjonas/inc-rename.nvim",
-    config = function()
-      require("inc_rename").setup()
-    end,
-  },
-  {
-    "nvimdev/indentmini.nvim",
-    config = function()
-      require("indentmini").setup()
-      vim.cmd.highlight('IndentLine guifg=#444444')
-      vim.cmd.highlight('IndentLineCurrent guifg=#666666')
-    end
-  },
-  {
-    'willothy/moveline.nvim',
-    build = 'make',
-  },
   {
     "rest-nvim/rest.nvim",
+    ft = 'http',
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       opts = function (_, opts)
@@ -127,6 +211,7 @@ require("lazy").setup({
       end,
     }
   },
+
   {
     "otavioschwanck/arrow.nvim",
     dependencies = {
@@ -138,28 +223,6 @@ require("lazy").setup({
       buffer_leader_key = 'k',
     },
   },
-  {
-    'stevearc/oil.nvim',
-    opts = {},
-    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    lazy = false,
-  },
 })
-
-pcall(require, 'plugins.leap')
-pcall(require, 'plugins.tmux')
-pcall(require, 'plugins.tele')
-pcall(require, 'plugins.trst')
-pcall(require, 'plugins.lspc')
-pcall(require, 'plugins.snip')
-pcall(require, 'plugins.ncmp')
-pcall(require, 'plugins.stal')
-pcall(require, 'plugins.surr')
-pcall(require, 'plugins.move')
-pcall(require, 'plugins.tree')
-pcall(require, 'plugins.sign')
-pcall(require, 'plugins.outl')
-pcall(require, 'plugins.conform')
-require('scrollbar').setup()
 
 vim.cmd[[colorscheme tokyonight-night]]
