@@ -1,12 +1,8 @@
 local map = require('keymapping')
-local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
+local lspconfig = vim.lsp.config
 local builtin_ok, builtin = pcall(require, 'telescope.builtin')
 
 if not builtin_ok then
-  return
-end
-
-if not lspconfig_ok then
   return
 end
 
@@ -31,21 +27,37 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-lspconfig.pyright.setup {
-  filetypes = {'python'}
-}
+lspconfig('pyright', {
+  filetypes = {'python'},
+  settings = {
+    python = {
+      autoSearchPaths = true,
+      useLibraryCodeForTypes = true,
+      diagnosticMode = "workspace",
+      typeCheckingMode = "basic",
+    },
+    venvPath = ".",
+    pythonPath = vim.fn.getcwd() .. "/.env/bin/python"
+  }
+})
 
-lspconfig.ts_ls.setup {
-  init_options = {
-    -- plugins = {
-    --   {
-    --     name = '@vue/typescript-plugin',
-    --     location = '/usr/local/lib/node_modules/@vue/typescript-plugin',
-    --     languages = {'vue', 'typescript', 'javascript'},
-    --   },
-    -- },
+lspconfig('svelte', {
+  capabilities = capabilities,
+  filetypes = { "svelte" },
+  settings = {
+    svelte = {
+      plugin = {
+        html = { completion = { enable = true, emmet = false } },
+        svelte = { completion = { enable = true, emmet = true } },
+        css = { completion = { enable = true, emmet = true }},
+      },
+    },
   },
-  root_dir = lspconfig.util.root_pattern('package.json', 'index.html'),
+})
+
+lspconfig('ts_ls', {
+  init_options = {},
+  root_markers = { 'package.json', 'index.html' },
   single_file_support = false,
   filetypes = {
     'typescript',
@@ -53,68 +65,58 @@ lspconfig.ts_ls.setup {
     'typescriptreact',
     'javascriptreact',
   }
-}
-
-lspconfig.texlab.setup({
-  filetypes = {'tex'},
-  auxDirectory = "build",
-  build = {
-    args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f", "-auxdir=build" },
-    onSave = true,
-    forwardSearchAfter = true,
-  },
-  chktex = {
-    onOpenAndSave = true,
-  }
 })
 
-lspconfig.tinymist.setup({})
+lspconfig('tinymist', {})
 
-lspconfig.emmet_language_server.setup({})
+lspconfig('emmet_language_server', {})
 
--- lspconfig.volar.setup{
---   filetypes = {'vue', 'typescript'}
--- }
-lspconfig.eslint.setup({
+lspconfig('eslint', {
   filetypes = {'vue', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact'}
 })
 
-lspconfig.clangd.setup({
+lspconfig('clangd', {
   filetypes = {'c', 'cpp'},
   cmd = {
     'clangd',
     '--offset-encoding=utf-16'
+  },
+  init_options = {
+    fallbackFlags = { '-xc', '-std=c11' }  -- -xc forces C mode
   }
 })
 
-lspconfig.rust_analyzer.setup({
+lspconfig('rust_analyzer', {
   filetypes = {'rust'},
   capabilities = capabilities,
 })
 
-lspconfig.lua_ls.setup({})
+lspconfig('lua_ls', {
+  filetypes = {'lua'}
+})
 
-lspconfig.gopls.setup({})
+lspconfig('gopls', {
+  filetypes = {'go'}
+})
 
-lspconfig.sourcekit.setup {
-  filetypes = { 'swift' },
+lspconfig('sourcekit', {
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
   single_file_support = true,
+  root_markers = { 'buildServer.json', '*.xcodeproj', '*.xcworkspace', 'Package.swift', 'compile_commands.json' },
   capabilities = {
     workspace = {
-        didChangeWatchedFiles = {
-            dynamicRegistration = true,
-        },
+      didChangeWatchedFiles = {
+        dynamicRegistration = true,
+      },
     },
-},
-}
-
-lspconfig.csharp_ls.setup {}
+  },
+})
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require'lspconfig'.cssls.setup {
+lspconfig('cssls', {
   capabilities = capabilities,
-}
+})
 
 require("clangd_extensions").setup({
   ast = {
@@ -184,4 +186,19 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+vim.lsp.enable({
+  'pyright',
+  'svelte',
+  'ts_ls',
+  'tinymist',
+  'emmet_language_server',
+  'eslint',
+  'clangd',
+  'rust_analyzer',
+  'lua_ls',
+  'gopls',
+  'sourcekit',
+  'cssls',
+})
 
