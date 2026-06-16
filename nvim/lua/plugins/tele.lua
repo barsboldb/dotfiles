@@ -21,11 +21,19 @@ telescope.setup {
   pickers = {
     find_files = {
       hidden = true,
-      file_ignore_patterns = {".git/", ".cache", "%.o", "%.a", "%.out", "%.class",
+      file_ignore_patterns = {"venv/", ".git/", ".cache", "%.o", "%.a", "%.out", "%.class",
 		"%.pdf", "%.mkv", "%.mp4", "%.zip", "target/"},
     },
+  },
+  extensions = {
+    ['ui-select'] = {
+      require('telescope.themes').get_dropdown {
+      }
+    }
   }
 }
+
+telescope.load_extension('ui-select')
 
 
 if builtin_ok then

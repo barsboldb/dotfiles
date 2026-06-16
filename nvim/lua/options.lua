@@ -17,12 +17,14 @@ local options = {
 	expandtab = true,
   shiftwidth = 2,
   tabstop = 2,
+  cinoptions = 'l1,:0',
   cursorline = true,
   number = true,
   relativenumber = true,
   signcolumn = 'yes',
   scrolloff = 8,
   mouse='',
+  laststatus = 3,
 }
 
 -- filetype plugin intend on
