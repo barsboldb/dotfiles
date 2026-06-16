@@ -1,26 +1,31 @@
 local map = require('keymapping')
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+local status, oil = pcall(require, "oil")
 
-local status_ok, nvim_tree = pcall(require, "nvim-tree")
-if not status_ok then
+if not status then
   return
 end
 
-nvim_tree.setup({
-  update_focused_file = {
-    enable = true,
-    update_cwd = true,
+oil.setup({
+  skip_confirm_for_simple_edits = true,
+  view_options = {
+    show_hidden = true,
+    is_always_hidden = function(name, _)
+      return name == '..' or name == '.git'
+    end,
   },
-  view = {
-    width = 40,
-    side = "right",
+  keymaps = {
+    ["<CR>"] = "actions.select",
+    ["<C-v>"] = { "actions.select", opts = { vertical = true } },
+    ["<C-r>"] = "actions.refresh",
   },
+  use_default_keymaps = false,
 })
 
-vim.api.nvim_create_autocmd({"QuitPre"}, {
-  callback = function() vim.cmd("NvimTreeClose") end,
-})
+map('n', '-', '<CMD>Oil<CR>', {silent = true})
 
-map('n', '<leader>E', ':NvimTreeToggle<cr>', {silent = true})
+require('nvim-treesitter.configs').setup {
+  ident = {
+    enable = true
+  }
+}
