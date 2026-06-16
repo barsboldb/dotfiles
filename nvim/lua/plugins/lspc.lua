@@ -1,10 +1,5 @@
 local map = require('keymapping')
 local lspconfig = vim.lsp.config
-local builtin_ok, builtin = pcall(require, 'telescope.builtin')
-
-if not builtin_ok then
-  return
-end
 
 function OpenDiagnosticIfNoFloat()
   for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -163,10 +158,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
     local opts = { buffer = ev.buf }
     map('n', 'gD', vim.lsp.buf.declaration, opts)
-    map('n', 'gd', builtin.lsp_definitions, opts)
+    map('n', 'gd', function() require('telescope.builtin').lsp_definitions() end, opts)
     map('n', 'K', vim.lsp.buf.hover, opts)
-    map('n', 'gi', builtin.lsp_implementations, opts)
-    map('n', 'gr', builtin.lsp_references, opts)
+    map('n', 'gi', function() require('telescope.builtin').lsp_implementations() end, opts)
+    map('n', 'gr', function() require('telescope.builtin').lsp_references() end, opts)
     map('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     map('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
     map('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
