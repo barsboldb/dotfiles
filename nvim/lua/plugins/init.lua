@@ -16,14 +16,10 @@ require("lazy").setup({
   "folke/tokyonight.nvim",
   'nvim-lua/plenary.nvim',
   { 'nvim-telescope/telescope.nvim', event = 'VeryLazy' },
+  'nvim-telescope/telescope-ui-select.nvim',
   'tpope/vim-commentary',
   'alexghergh/nvim-tmux-navigation',
-  'ggandor/leap.nvim',
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" }
-  },
+  'https://codeberg.org/andyg/leap.nvim',
   'rebelot/kanagawa.nvim',
   {'nvim-treesitter/nvim-treesitter'},
 
@@ -48,13 +44,20 @@ require("lazy").setup({
   'akinsho/bufferline.nvim',
   'nvim-tree/nvim-tree.lua',
 
-  'sindrets/diffview.nvim',
-
+  {
+    "esmuellert/codediff.nvim",
+    cmd = "CodeDiff",
+    opts = {
+      keymaps = {
+        view = {
+          toggle_layout = 'l'
+        },
+      },
+    }
+  },
   {
     "L3MON4D3/LuaSnip",
-    -- follow latest release.
-    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-    -- install jsregexp (optional!).
+    version = "v2.*",
     build = "make install_jsregexp"
   },
   {
@@ -62,6 +65,32 @@ require("lazy").setup({
     opts = {}
   },
   { 'chomosuke/typst-preview.nvim', lazy = true },
+  { "toppair/peek.nvim",
+    lazy = true,
+    build = "deno task --quiet build:fast",
+  },
+  {
+    "hat0uma/csvview.nvim",
+    ---@module "csvview"
+    ---@type CsvView.Options
+    opts = {
+      parser = { comments = { "#", "//" } },
+      keymaps = {
+        -- Text objects for selecting fields
+        textobject_field_inner = { "if", mode = { "o", "x" } },
+        textobject_field_outer = { "af", mode = { "o", "x" } },
+        -- Excel-like navigation:
+        -- Use <Tab> and <S-Tab> to move horizontally between fields.
+        -- Use <Enter> and <S-Enter> to move vertically between rows and place the cursor at the end of the field.
+        -- Note: In terminals, you may need to enable CSI-u mode to use <S-Tab> and <S-Enter>.
+        jump_next_field_end = { "<Tab>", mode = { "n", "v" } },
+        jump_prev_field_end = { "<S-Tab>", mode = { "n", "v" } },
+        jump_next_row = { "<Enter>", mode = { "n", "v" } },
+        jump_prev_row = { "<S-Enter>", mode = { "n", "v" } },
+      },
+    },
+    cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
+  },
 
   'ThePrimeagen/vim-be-good',
 
@@ -87,13 +116,39 @@ require("lazy").setup({
   {
     'willothy/moveline.nvim',
     build = 'make',
-  }
+  },
+  {
+    "rest-nvim/rest.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      opts = function (_, opts)
+        opts.ensure_installed = opts.ensure_installed or {}
+        table.insert(opts.ensure_installed, "http")
+      end,
+    }
+  },
+  {
+    "otavioschwanck/arrow.nvim",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+    },
+    opts = {
+      show_icons = true,
+      leader_key = ',',
+      buffer_leader_key = 'k',
+    },
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    lazy = false,
+  },
 })
 
 pcall(require, 'plugins.leap')
 pcall(require, 'plugins.tmux')
 pcall(require, 'plugins.tele')
-pcall(require, 'plugins.harp')
 pcall(require, 'plugins.trst')
 pcall(require, 'plugins.lspc')
 pcall(require, 'plugins.snip')
@@ -101,11 +156,10 @@ pcall(require, 'plugins.ncmp')
 pcall(require, 'plugins.stal')
 pcall(require, 'plugins.surr')
 pcall(require, 'plugins.move')
--- pcall(require, 'plugins.tree')
+pcall(require, 'plugins.tree')
 pcall(require, 'plugins.sign')
 pcall(require, 'plugins.outl')
 pcall(require, 'plugins.conform')
--- pcall(require, 'plugins.copi')
 require('scrollbar').setup()
 
-vim.cmd[[colorscheme catppuccin-mocha]]
+vim.cmd[[colorscheme tokyonight-night]]
