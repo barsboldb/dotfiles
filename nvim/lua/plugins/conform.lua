@@ -9,6 +9,8 @@ conform.setup({
   formatters_by_ft = {
     c = { 'clang-format' },
     go = { 'gofmt' },
+    javascript = { 'prettier', 'eslint_d' },
+    typescript = { 'prettier', 'eslint_d' },
   },
 })
 

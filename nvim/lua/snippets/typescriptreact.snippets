@@ -1,0 +1,15 @@
+snippet efunc "export default function declaration"
+	export default function $1($2) {
+		$3
+	}$0
+
+snippet funcc "export default function component"
+	type $1Type = {
+		$4
+	}
+	function $1(${2:props}) {
+		return (
+			<div>${3:Hello, World!}</div>
+		)
+	}
+	export default $1
