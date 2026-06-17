@@ -78,6 +78,16 @@ return {
   },
 
   {
+    'mikesmithgh/kitty-scrollback.nvim',
+    lazy = true,
+    cmd = { 'KittyScrollbackGenerateKittens', 'KittyScrollbackCheckHealth' },
+    event = { 'User KittyScrollbackLaunch' },
+    config = function()
+      require('kitty-scrollback').setup()
+    end,
+  },
+
+  {
     'otavioschwanck/arrow.nvim',
     dependencies = { { 'nvim-tree/nvim-web-devicons' } },
     opts = {
