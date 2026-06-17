@@ -2,12 +2,14 @@ local o = vim.opt
 local keycode = vim.keycode
 
 vim.g.mapleader = keycode'<space>'
+vim.g.loaded_matchparen = 1
 
 -- o.statuscolumn = "%s%#AbsoluteColumn#%l%1*│%r "
 
 local options = {
 	hlsearch = true,
 	ignorecase = true,
+	smartcase = true,
 	splitbelow = true,
 	splitright = true,
 	swapfile = false,
@@ -33,10 +35,5 @@ for k, v in pairs(options) do
   o[k] = v
 end
 
-vim.cmd[[set colorcolumn=80]]
-vim.cmd [[
-  augroup _auto_resize
-    autocmd!
-    autocmd VimResized * tabdo wincmd = 
-  augroup end
-]]
+vim.opt.colorcolumn = '80'
+vim.api.nvim_create_autocmd('VimResized', { command = 'tabdo wincmd =' })

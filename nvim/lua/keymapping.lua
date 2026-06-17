@@ -1,6 +1,5 @@
 local function map(mode, l, r, opts)
   opts = opts or { noremap = true, silent = true }
-  opts.buffer = bufnr
   vim.keymap.set(mode, l, r, opts)
 end
 
@@ -43,17 +42,5 @@ map("n", "<leader>o", "<C-o>", { noremap = true })
 map("n", "<leader>i", "<C-i>", { noremap = true })
 
 map("i", "<M-BS>", "<C-w>", {})
-
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "netrw",
---   callback = function()
---     print("hello")
---     local opts = { buffer = true, noremap = true, silent = true }
---     map("n", "h", "-^", opts)       -- go up directory
---     map("n", "t", "j", opts)       -- go up directory
---     map("n", "n", "k", opts)     -- open file/directory
---     map("n", "q", ":q<CR>", opts)   -- quit netrw
---   end
--- })
 
 return map
